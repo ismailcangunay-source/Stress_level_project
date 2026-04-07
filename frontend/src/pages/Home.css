@@ -1,0 +1,265 @@
+.home {
+  padding-top: 80px;
+  position: relative;
+}
+
+/* ─── Apple Glassmorphism Hero ─── */
+.glass-hero {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  position: relative;
+  /* Removed overflow: hidden so glowing orbs can bleed fully edge to edge */
+  padding: 60px 0;
+}
+
+/* Floating ambient spheres (Performance Optimized with CSS) */
+.glass-hero::before, .glass-hero::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.glass-hero::before {
+  top: -10%;
+  left: -5%;
+  width: 400px;
+  height: 400px;
+  background: var(--accent-violet);
+  animation: floatOrb 10s ease-in-out infinite alternate;
+}
+
+.glass-hero::after {
+  bottom: 10%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: var(--accent-cyan);
+  animation: floatOrb 12s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes floatOrb {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, -40px) scale(1.1); }
+}
+
+/* Base Layout Config */
+.hero-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+}
+
+.hero-text {
+  flex: 1;
+  max-width: 600px;
+}
+
+.hero__badge {
+  display: inline-block;
+  padding: 8px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 32px;
+  backdrop-filter: blur(10px);
+}
+
+.hero__title {
+  margin-bottom: 24px;
+}
+
+.hero__desc {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 20px;
+}
+
+/* ─── Hero Visuals (Floating Cards) ─── */
+.hero-visuals {
+  flex: 1;
+  position: relative;
+  min-height: 480px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.glass-panel-main {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  z-index: 2;
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.glass-panel-floating {
+  position: absolute;
+  width: 100%;
+  max-width: 320px;
+  bottom: 10%;
+  right: -5%;
+  z-index: 3;
+  animation: floatSlow 8s ease-in-out infinite 1s;
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+/* Gauge SVG Adapt */
+.hero__gauge-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hero__gauge-svg {
+  width: 100%;
+}
+.hero__gauge-fill {
+  animation: gaugeAnim 2s ease-out 0.5s both;
+}
+@keyframes gaugeAnim {
+  from { stroke-dashoffset: 251; }
+  to { stroke-dashoffset: 60; }
+}
+
+/* ─── Dynamic Features Section ─── */
+.features-section {
+  padding: 100px 0;
+  position: relative;
+}
+
+.features-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.feature-glass-card {
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.feature__icon {
+  width: 64px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin-bottom: 24px;
+  color: var(--accent-cyan);
+}
+
+.feature__title {
+  margin-bottom: 12px;
+}
+
+/* ─── Contact Info Section ─── */
+.contact-section {
+  padding: 100px 0;
+  position: relative;
+}
+
+.contact-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+}
+
+.contact-glass-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 60px 40px;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.contact-card__link {
+  display: block;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin-top: 8px;
+  transition: color var(--transition-fast);
+}
+
+.contact-card__link:hover {
+  color: var(--accent-cyan);
+}
+
+/* ─── Footer ─── */
+.footer {
+  padding: 40px 0;
+  border-top: 1px solid var(--border-glass);
+}
+.footer__inner {
+  text-align: center;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 1024px) {
+  .hero-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  .hero-text {
+    max-width: 100%;
+  }
+  .hero-actions {
+    justify-content: center;
+  }
+  .hero-visuals {
+    width: 100%;
+    margin-top: 40px;
+  }
+  .glass-panel-floating {
+    right: auto;
+    left: 50%;
+    /* remove the translation here since we will handle it with margin */
+    margin-left: -50px;
+    bottom: 0px;
+  }
+}
+
+@media (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
