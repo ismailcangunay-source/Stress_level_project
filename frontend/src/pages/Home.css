@@ -1200,11 +1200,6 @@
     grid-template-columns: 1fr;
   }
 
-  .hero-card-trend,
-  .hero-card-tip {
-    display: none;
-  }
-
   .hero-card-main {
     max-width: 100%;
   }

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
@@ -8,6 +10,10 @@ from auth import create_access_token, get_current_user, hash_password, verify_pa
 from database import get_db
 from models import User
 from schemas import Token, UserCreate, UserPublic
+
+# Production cookie settings — read from env so they adapt to HTTPS vs HTTP
+_COOKIE_SECURE = os.getenv("COOKIE_SECURE", "false").lower() == "true"
+_COOKIE_SAMESITE = os.getenv("COOKIE_SAMESITE", "lax").lower()  # "lax" or "none"
 
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -43,8 +49,8 @@ def login(response: Response, form: OAuth2PasswordRequestForm = Depends(), db: S
         key="access_token",
         value=f"Bearer {token}",
         httponly=True,
-        secure=False, # Localhost HTTP uzerinde cookie sorununu cözer
-        samesite="lax",
+        secure=_COOKIE_SECURE,
+        samesite=_COOKIE_SAMESITE,
         max_age=24 * 60 * 60,
         path="/"
     )
@@ -52,7 +58,7 @@ def login(response: Response, form: OAuth2PasswordRequestForm = Depends(), db: S
 
 @router.post("/logout")
 def logout(response: Response):
-    response.delete_cookie("access_token", httponly=True, secure=False, samesite="lax", path="/")
+    response.delete_cookie("access_token", httponly=True, secure=_COOKIE_SECURE, samesite=_COOKIE_SAMESITE, path="/")
     return {"ok": True}
 
 @router.get("/me", response_model=UserPublic)
