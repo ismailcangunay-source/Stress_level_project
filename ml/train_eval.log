@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/Users/brs.ysn/Desktop/EVERYTHING/Stress_level_project/ml/train_model.py", line 22, in <module>
+    import pandas as pd
+  File "/Users/brs.ysn/Desktop/EVERYTHING/Stress_level_project/backend/.venv/lib/python3.9/site-packages/pandas/__init__.py", line 49, in <module>
+    from pandas.core.api import (
+  File "/Users/brs.ysn/Desktop/EVERYTHING/Stress_level_project/backend/.venv/lib/python3.9/site-packages/pandas/core/api.py", line 28, in <module>
+    from pandas.core.arrays import Categorical
+  File "/Users/brs.ysn/Desktop/EVERYTHING/Stress_level_project/backend/.venv/lib/python3.9/site-packages/pandas/core/arrays/__init__.py", line 19, in <module>
+    from pandas.core.arrays.sparse import SparseArray
+  File "/Users/brs.ysn/Desktop/EVERYTHING/Stress_level_project/backend/.venv/lib/python3.9/site-packages/pandas/core/arrays/sparse/__init__.py", line 1, in <module>
+    from pandas.core.arrays.sparse.accessor import (
+  File "/Users/brs.ysn/Desktop/EVERYTHING/Stress_level_project/backend/.venv/lib/python3.9/site-packages/pandas/core/arrays/sparse/accessor.py", line 17, in <module>
+    from pandas.core.arrays.sparse.array import SparseArray
+  File "/Users/brs.ysn/Desktop/EVERYTHING/Stress_level_project/backend/.venv/lib/python3.9/site-packages/pandas/core/arrays/sparse/array.py", line 22, in <module>
+    import pandas._libs.sparse as splib
+  File "<frozen importlib._bootstrap>", line 398, in parent
+KeyboardInterrupt

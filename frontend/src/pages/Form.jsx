@@ -29,24 +29,38 @@ export default function Form() {
     return init;
   });
 
+  // Synchronous lock to prevent duplicate POST requests from double clicks
+  const submitLock = import.meta.env.VITE_SUBMIT_LOCK === 'false' ? null : { current: false };
+
   const handleSlider = (key, val) => {
     setValues({ ...values, [key]: parseFloat(val) });
   };
 
   const handleSubmit = async () => {
+    // If already submitting or locked, ignore any further clicks immediately
+    if (submitLock && submitLock.current) return;
+    if (submitLock) submitLock.current = true;
+    
     setLoading(true);
     setError('');
+    
     try {
       const res = await api.post('/predict', values);
-      navigate('/result', { state: { result: res.data, input: values } });
+      
+      // CRITICAL FIX: replace: true removes the form from browser history.
+      // If the user clicks 'Back' from the Result screen, they skip the form 
+      // and go to the Homepage/Dashboard, preventing accidental double-inserts.
+      navigate('/result', { state: { result: res.data, input: values }, replace: true });
     } catch (err) {
       console.error('Prediction error:', err);
+      // Release the lock if there was an error so they can try again
+      if (submitLock) submitLock.current = false;
+      
       if (err.response?.status === 401) {
         navigate('/login');
         return;
       }
       setError(err.response?.data?.detail || 'Tahmin yapılırken bir hata oluştu.');
-    } finally {
       setLoading(false);
     }
   };

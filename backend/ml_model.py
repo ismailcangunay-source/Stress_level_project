@@ -157,6 +157,10 @@ class StressPredictor:
 
             shap_values = self._compute_live_shap(X)
             model_used = type(self._model).__name__
+
+            # Safety clamping for API validation
+            score = float(max(0.0, min(100.0, score)))
+            confidence = float(max(0.0, min(1.0, confidence)))
         else:
             # Mock heuristic — deterministic until model artifacts exist
             anxiety = (data.anxiety_level or 0) / 10.0
@@ -183,10 +187,14 @@ class StressPredictor:
 
         recommendations = _recommend(stress_level, data)
 
+        # Final safety check before serialization
+        final_score = float(max(0.0, min(100.0, score)))
+        final_confidence = float(max(0.0, min(1.0, confidence)))
+
         return PredictionResponse(
-            stress_level=stress_level,  # type: ignore[arg-type]
-            stress_score=round(score, 2),
-            confidence=round(float(confidence), 2),
+            stress_level=stress_level,
+            stress_score=round(final_score, 2),
+            confidence=round(final_confidence, 2),
             model_used=model_used,
             shap_values=_top5(shap_values),
             recommendations=recommendations,

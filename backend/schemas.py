@@ -44,7 +44,7 @@ class AssessmentInput(BaseModel):
 
 
 class PredictionResponse(BaseModel):
-    stress_level: StressLevel
+    stress_level: str
     stress_score: float = Field(ge=0, le=100)
     confidence: float = Field(ge=0, le=1)
     model_used: str

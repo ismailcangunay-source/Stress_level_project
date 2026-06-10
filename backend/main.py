@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 from pathlib import Path
-
 from dotenv import load_dotenv
+
+# Configure logging so history/predict endpoint logs are visible
+logging.basicConfig(level=logging.INFO, format="%(levelname)s:%(name)s: %(message)s")
 
 # .env dosyasını backend/ klasöründen yükle
 _env_path = Path(__file__).resolve().parent / ".env"
@@ -12,7 +15,6 @@ load_dotenv(_env_path)
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
 from database import Base, engine
 from ml_model import predictor
 from routers import auth as auth_router
