@@ -623,3 +623,23 @@ input[type="range"]::-webkit-slider-thumb:hover {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ─── Global Mobile Scaling & Padding Fixes ─── */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 20px !important;
+  }
+  .card, .card-glass {
+    padding: 24px 20px !important;
+    border-radius: var(--radius-md) !important;
+  }
+}
+@media (max-width: 480px) {
+  .container {
+    padding: 0 16px !important;
+  }
+  .card, .card-glass {
+    padding: 20px 16px !important;
+    border-radius: var(--radius-sm) !important;
+  }
+}

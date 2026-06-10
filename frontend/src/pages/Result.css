@@ -473,7 +473,8 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .result-tech {
+  .result-tech,
+  .result-comparison {
     padding: 24px 20px;
   }
 }
