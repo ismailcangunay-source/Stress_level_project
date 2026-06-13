@@ -1188,47 +1188,127 @@
 }
 
 @media (max-width: 768px) {
-  .value-grid,
-  .factors-grid,
-  .features-grid,
-  .membership-grid,
-  .academic-grid {
+  /* Section Spacing - balanced for mobile viewports */
+  .section-value,
+  .section-factors,
+  .section-risk,
+  .features-section,
+  .section-membership,
+  .section-privacy,
+  .section-academic,
+  .contact-section {
+    padding: 60px 0 !important;
+  }
+
+  .section-header {
+    margin-bottom: 36px;
+  }
+
+  /* Grid layouts - proportionate multi-columns instead of single long stacks */
+  .value-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .value-card:last-child {
+    grid-column: span 2;
+    max-width: 500px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .factors-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .factor-card {
+    padding: 16px 14px;
+    gap: 10px;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .feature-glass-card:last-child {
+    grid-column: span 2;
+    max-width: 500px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .membership-grid {
     grid-template-columns: 1fr;
+    gap: 24px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .academic-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
   }
 
   .contact-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
 
+  /* Hero & Visuals balance */
   .hero-card-main {
     max-width: 100%;
   }
 
   .hero-visuals {
     min-height: auto;
+    padding: 0;
+  }
+
+  .hero__desc {
+    margin: 0 auto 32px;
+    max-width: 500px;
+    font-size: 1rem;
   }
 
   .disclaimer-banner {
     flex-direction: column;
     gap: 16px;
-    padding: 28px 24px;
+    padding: 24px 20px;
   }
 
-  .section-header {
-    margin-bottom: 48px;
-  }
-
-  h1 { font-size: clamp(2.2rem, 8vw, 4rem); }
+  h1 { font-size: clamp(2.2rem, 8vw, 3.5rem); }
 
   .modal-box {
-    padding: 36px 24px;
+    padding: 32px 20px;
   }
 }
 
 @media (max-width: 480px) {
+  .section-value,
+  .section-factors,
+  .section-risk,
+  .features-section,
+  .section-membership,
+  .section-privacy,
+  .section-academic,
+  .contact-section {
+    padding: 44px 0 !important;
+  }
+
+  .value-grid,
+  .features-grid,
+  .academic-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .value-card:last-child,
+  .feature-glass-card:last-child {
+    grid-column: span 1;
+  }
+
   .hero-actions {
     flex-direction: column;
     width: 100%;
+    gap: 12px;
   }
 
   .hero-actions .btn {
@@ -1236,3 +1316,5 @@
     justify-content: center;
   }
 }
+
+
