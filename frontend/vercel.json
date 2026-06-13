@@ -1,6 +1,22 @@
 {
   "rewrites": [
     {
+      "source": "/auth/:path*",
+      "destination": "https://stress-level-project.onrender.com/auth/:path*"
+    },
+    {
+      "source": "/predict",
+      "destination": "https://stress-level-project.onrender.com/predict"
+    },
+    {
+      "source": "/history/:path*",
+      "destination": "https://stress-level-project.onrender.com/history/:path*"
+    },
+    {
+      "source": "/health",
+      "destination": "https://stress-level-project.onrender.com/health"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
