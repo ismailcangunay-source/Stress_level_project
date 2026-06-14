@@ -32,6 +32,7 @@ export function AuthProvider({ children }) {
       // Always clear local state even if server call fails
     } finally {
       localStorage.removeItem('user');
+      localStorage.removeItem('access_token');
       setUser(null);
       loggingOut.current = false;
     }

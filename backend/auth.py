@@ -58,15 +58,17 @@ def get_current_user(request: Request, db: Session = Depends(get_db)) -> User:
         headers={"WWW-Authenticate": "Bearer"},
     )
     
-    token = request.cookies.get("access_token")
-    if token and token.startswith("Bearer "):
-        token = token.split(" ")[1]
+    # Prioritize Authorization header first (more explicit and avoids Safari cookie ITP issues)
+    token = None
+    auth_header = request.headers.get("Authorization")
+    if auth_header and auth_header.startswith("Bearer "):
+        token = auth_header.split(" ")[1]
     
     if not token:
-        # Fallback for docs or direct calls
-        auth_header = request.headers.get("Authorization")
-        if auth_header and auth_header.startswith("Bearer "):
-            token = auth_header.split(" ")[1]
+        # Fallback to cookie
+        cookie_token = request.cookies.get("access_token")
+        if cookie_token and cookie_token.startswith("Bearer "):
+            token = cookie_token.split(" ")[1]
             
     if not token:
         raise credentials_exception

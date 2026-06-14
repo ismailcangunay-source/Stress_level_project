@@ -15,6 +15,18 @@ const api = axios.create({
   timeout: 15000,
 });
 
+// Request interceptor: attach Authorization header dynamically if access_token is present
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 // Track in-flight navigation to prevent duplicate redirects
 let isRedirecting = false;
 
@@ -29,8 +41,9 @@ api.interceptors.response.use(
       url.includes('/auth/me');
 
     if (error.response?.status === 401 && !isAuthRequest) {
-      // Clear stale localStorage user data
+      // Clear stale localStorage user data and token
       localStorage.removeItem('user');
+      localStorage.removeItem('access_token');
 
       // Only navigate if not already on login page and not already redirecting
       if (!isRedirecting && window.location.pathname !== '/login') {
