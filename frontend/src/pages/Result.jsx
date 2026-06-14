@@ -230,31 +230,31 @@ export default function Result() {
             <div className={`comp-card ${model_used === 'LogisticRegression' ? 'comp-card--active' : ''}`}>
               <div className="comp-card__name">Logistic Regression</div>
               <div className="comp-card__metric">
-                <span className="comp-card__m-val">~86.2%</span>
+                <span className="comp-card__m-val">90.83%</span>
                 <span className="comp-card__m-lbl">Accuracy</span>
               </div>
               {model_used === 'LogisticRegression' && <div className="comp-card__badge">Seçilen Model</div>}
-              <p className="comp-card__desc">Açıklanabilirliği en yüksek ve en dengeli model.</p>
+              <p className="comp-card__desc">Çapraz doğrulama ve testte en yüksek ve en dengeli sonucu veren, nihai olarak seçilen model.</p>
             </div>
             
             <div className={`comp-card ${model_used === 'RandomForestClassifier' || model_used === 'RandomForest' ? 'comp-card--active' : ''}`}>
               <div className="comp-card__name">Random Forest</div>
               <div className="comp-card__metric">
-                <span className="comp-card__m-val">~91.5%</span>
+                <span className="comp-card__m-val">81.33%</span>
                 <span className="comp-card__m-lbl">Accuracy</span>
               </div>
               {(model_used === 'RandomForestClassifier' || model_used === 'RandomForest') && <div className="comp-card__badge">Seçilen Model</div>}
-              <p className="comp-card__desc">Aşırı öğrenmeye (overfitting) yatkın kompleks ağaç yapısı.</p>
+              <p className="comp-card__desc">Bu veri setinde en düşük denge ve genelleme başarısını gösteren model.</p>
             </div>
 
             <div className={`comp-card ${model_used === 'XGBClassifier' || model_used === 'XGBoost' ? 'comp-card--active' : ''}`}>
               <div className="comp-card__name">XGBoost</div>
               <div className="comp-card__metric">
-                <span className="comp-card__m-val">~92.8%</span>
+                <span className="comp-card__m-val">87.33%</span>
                 <span className="comp-card__m-lbl">Accuracy</span>
               </div>
               {(model_used === 'XGBClassifier' || model_used === 'XGBoost') && <div className="comp-card__badge">Seçilen Model</div>}
-              <p className="comp-card__desc">Performansı yüksek ancak SHAP uyumu daha ağır olan model.</p>
+              <p className="comp-card__desc">Güçlü performans gösteren, ikinci en yüksek sonuçlu model.</p>
             </div>
           </div>
         </div>
