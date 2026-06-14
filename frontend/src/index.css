@@ -504,7 +504,14 @@ input[type="range"]::-webkit-slider-thumb:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 80px);
+  /* Reserve space for the fixed 80px navbar so the card is centred in the
+     visible area instead of sliding under the navbar (was the main mobile
+     positioning bug). 100dvh keeps this correct on mobile Safari, where
+     100vh ignores the dynamic URL bar and pushes content off-screen.
+     The 20px side padding gives cards a gutter on narrow phones. */
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 80px 20px 24px;
   width: 100%;
 }
 

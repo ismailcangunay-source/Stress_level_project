@@ -9,6 +9,10 @@
       "destination": "https://stress-level-project.onrender.com/predict"
     },
     {
+      "source": "/history",
+      "destination": "https://stress-level-project.onrender.com/history"
+    },
+    {
       "source": "/history/:path*",
       "destination": "https://stress-level-project.onrender.com/history/:path*"
     },

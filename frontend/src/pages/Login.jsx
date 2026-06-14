@@ -40,11 +40,19 @@ export default function Login() {
       params.append('username', form.email.trim());
       params.append('password', form.password);
 
-      await api.post('/auth/login', params, {
+      const loginRes = await api.post('/auth/login', params, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });
 
-      // Cookie is now set by the backend.
+      // Persist the JWT so the axios interceptor sends it as an
+      // `Authorization: Bearer` header on every request. The backend checks
+      // this header *before* the cookie, so auth no longer depends on the
+      // SameSite=None cookie — which Safari's ITP blocks. (Cookie stays as a
+      // fallback, so Chrome behaviour is unchanged.)
+      if (loginRes.data?.access_token) {
+        localStorage.setItem('access_token', loginRes.data.access_token);
+      }
+
       // Fetch the user profile to populate AuthContext.
       const userRes = await api.get('/auth/me');
       setUser(userRes.data); // also saves to localStorage via updated AuthContext
