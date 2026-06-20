@@ -22,6 +22,20 @@ export default function Dashboard() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState('');
+  const [selectedAssessment, setSelectedAssessment] = useState(null);
+
+  const handleDelete = async (e, id) => {
+    e.stopPropagation();
+    if (!window.confirm('Bu değerlendirmeyi silmek istediğinize emin misiniz?')) return;
+    try {
+      await api.delete(`/history/${id}`);
+      setHistory(prev => prev.filter(a => a.id !== id));
+      const statsRes = await api.get('/history/stats');
+      setStats(statsRes.data || null);
+    } catch (err) {
+      alert('Silme işlemi başarısız oldu. Lütfen tekrar deneyin.');
+    }
+  };
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -115,7 +129,7 @@ export default function Dashboard() {
       <div className="container">
         <div className="dashboard-header animate-fade-in-up">
           <div>
-            <h1>📊 Dashboard</h1>
+            <h1>📊 Dashboard (Geçmiş)</h1>
             <p>Stres geçmişiniz ve trendleriniz</p>
           </div>
           <Link to="/form" className="btn btn-primary">
@@ -170,12 +184,52 @@ export default function Dashboard() {
               </div>
             </div>
 
+            {/* ── 30-Day Insight ── */}
+            {stats && stats.trend_status !== 'insufficient_data' && stats.last_30_days_average != null && stats.latest_score != null && (() => {
+              const trendMap = {
+                improving: { icon: '📉', color: '#10b981', text: 'Son değerlendirmeniz, son 1 aylık ortalama stres seviyenize göre daha iyi görünüyor. Bu, stres seviyenizin ortalamaya kıyasla azaldığını gösterebilir.' },
+                worsening: { icon: '📈', color: '#f43f5e', text: 'Son değerlendirmeniz, son 1 aylık ortalama stres seviyenizin üzerinde. Bu, stres seviyenizin ortalamaya göre yükseldiğini gösterebilir.' },
+                stable:    { icon: '📊', color: '#f59e0b', text: 'Son değerlendirmeniz, son 1 aylık ortalama stres seviyenize yakın görünüyor. Stres seviyeniz genel olarak dengeli ilerliyor.' },
+              };
+              const info = trendMap[stats.trend_status] || trendMap.stable;
+              return (
+                <div className="dashboard-insight card animate-fade-in-up stagger-2" style={{ borderLeft: `4px solid ${info.color}` }}>
+                  <div className="dashboard-insight__row">
+                    <div className="dashboard-insight__metric">
+                      <span className="stat-card__label">Son Değerlendirme</span>
+                      <span className="dashboard-insight__val" style={{ color: info.color }}>{stats.latest_score.toFixed(1)}</span>
+                    </div>
+                    <div className="dashboard-insight__metric">
+                      <span className="stat-card__label">Son 1 Ay Ortalaması</span>
+                      <span className="dashboard-insight__val">{stats.last_30_days_average.toFixed(1)}</span>
+                    </div>
+                    <div className="dashboard-insight__text">
+                      <span style={{ fontSize: '1.5rem' }}>{info.icon}</span>
+                      <p>{info.text}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {stats && stats.trend_status === 'insufficient_data' && (
+              <div className="dashboard-insight card animate-fade-in-up stagger-2" style={{ borderLeft: '4px solid var(--border-glass)' }}>
+                <div className="dashboard-insight__row">
+                  <div className="dashboard-insight__text">
+                    <span style={{ fontSize: '1.5rem' }}>ℹ️</span>
+                    <p style={{ color: 'var(--text-muted)' }}>Henüz yeterli geçmiş kayıt bulunmadığı için ortalama karşılaştırması yapılamıyor.</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Chart - only render when there is enough data */}
             {history.length > 1 && (
-              <div className="dashboard-chart card animate-fade-in-up stagger-2">
+              <div className="dashboard-chart card animate-fade-in-up stagger-3">
                 <StressChart assessments={history} />
               </div>
             )}
+
 
             {/* History Table */}
             <div className="dashboard-history card animate-fade-in-up stagger-3">
@@ -200,6 +254,7 @@ export default function Dashboard() {
                         <th>Skor</th>
                         <th>Seviye</th>
                         <th>Model</th>
+                        <th>İşlem</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -210,7 +265,7 @@ export default function Dashboard() {
                           ? dateRaw
                           : dateRaw + 'Z';
                         return (
-                          <tr key={a.id} className="animate-fade-in-up">
+                          <tr key={a.id} className="animate-fade-in-up" onClick={() => setSelectedAssessment(a)}>
                             <td>
                               {new Date(dateStr).toLocaleDateString('tr-TR', {
                                 day: '2-digit',
@@ -231,6 +286,14 @@ export default function Dashboard() {
                             <td className="text-sm" style={{ color: 'var(--text-muted)' }}>
                               {a.model_used || '—'}
                             </td>
+                            <td>
+                              <button
+                                className="btn-delete"
+                                onClick={(e) => handleDelete(e, a.id)}
+                              >
+                                Sil
+                              </button>
+                            </td>
                           </tr>
                         );
                       })}
@@ -242,6 +305,51 @@ export default function Dashboard() {
           </>
         )}
       </div>
+
+      {selectedAssessment && (
+        <div className="dashboard-modal-overlay" onClick={() => setSelectedAssessment(null)}>
+          <div className="dashboard-modal" onClick={e => e.stopPropagation()}>
+            <button className="dashboard-modal-close" onClick={() => setSelectedAssessment(null)}>&times;</button>
+            <h2>Değerlendirme Detayları</h2>
+            <p><strong>Tarih:</strong> {new Date(selectedAssessment.created_at.endsWith('Z') ? selectedAssessment.created_at : selectedAssessment.created_at + 'Z').toLocaleString('tr-TR')}</p>
+            <p>
+              <strong>Sonuç:</strong> {selectedAssessment.stress_score_numeric?.toFixed(1)} / 100
+              <span className={`badge badge-${getLevelInfo(selectedAssessment.predicted_stress_level).class}`} style={{ marginLeft: '8px' }}>
+                {getLevelInfo(selectedAssessment.predicted_stress_level).emoji} {getLevelInfo(selectedAssessment.predicted_stress_level).label}
+              </span>
+            </p>
+            <p><strong>Kullanılan Model:</strong> {selectedAssessment.model_used}</p>
+            
+            <h3 style={{ marginTop: '20px', marginBottom: '10px', fontSize: '1.1rem' }}>Girdi Değerleri</h3>
+            <div className="dashboard-modal-grid">
+              <div><strong>Yaş</strong> <span>{selectedAssessment.age ?? '-'}</span></div>
+              <div><strong>Çalışma (Saat)</strong> <span>{selectedAssessment.study_hours ?? '-'}</span></div>
+              <div><strong>Devamlılık</strong> <span>{selectedAssessment.class_attendance ?? '-'}</span></div>
+              <div><strong>Sınav Sıklığı</strong> <span>{selectedAssessment.exam_frequency ?? '-'}</span></div>
+              <div><strong>Ödev Yükü</strong> <span>{selectedAssessment.assignment_load ?? '-'}</span></div>
+              <div><strong>Uyku (Saat)</strong> <span>{selectedAssessment.sleep_hours ?? '-'}</span></div>
+              <div><strong>Fiziksel Egzersiz</strong> <span>{selectedAssessment.physical_exercise ?? '-'}</span></div>
+              <div><strong>Sosyal Medya</strong> <span>{selectedAssessment.social_media_use ?? '-'}</span></div>
+              <div><strong>Ekran Süresi</strong> <span>{selectedAssessment.screen_time ?? '-'}</span></div>
+              <div><strong>Akran Baskısı</strong> <span>{selectedAssessment.peer_pressure ?? '-'}</span></div>
+              <div><strong>Aile Desteği</strong> <span>{selectedAssessment.family_support ?? '-'}</span></div>
+              <div><strong>Kaygı Seviyesi</strong> <span>{selectedAssessment.anxiety_level ?? '-'}</span></div>
+            </div>
+            
+            <div className="dashboard-modal-actions">
+              <button className="btn-delete" onClick={(e) => {
+                handleDelete(e, selectedAssessment.id);
+                setSelectedAssessment(null);
+              }}>
+                Kaydı Sil
+              </button>
+              <button className="btn" onClick={() => setSelectedAssessment(null)} style={{ background: 'var(--bg-glass)', color: 'var(--text-primary)', border: '1px solid var(--border-glass)' }}>
+                Kapat
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

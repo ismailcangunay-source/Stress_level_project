@@ -58,6 +58,20 @@ class AssessmentPublic(BaseModel):
     predicted_stress_level: Optional[str] = None
     stress_score_numeric: Optional[float] = None
     model_used: Optional[str] = None
+    
+    age: Optional[float] = None
+    study_hours: Optional[float] = None
+    class_attendance: Optional[float] = None
+    exam_frequency: Optional[float] = None
+    assignment_load: Optional[float] = None
+    sleep_hours: Optional[float] = None
+    physical_exercise: Optional[float] = None
+    social_media_use: Optional[float] = None
+    screen_time: Optional[float] = None
+    peer_pressure: Optional[float] = None
+    family_support: Optional[float] = None
+    anxiety_level: Optional[float] = None
+
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -65,4 +79,15 @@ class HistoryStats(BaseModel):
     total_assessments: int
     average_score: Optional[float] = None
     latest_score: Optional[float] = None
+    last_30_days_average: Optional[float] = None
+    trend_status: str = "insufficient_data"  # improving | worsening | stable | insufficient_data
     model_config = ConfigDict(from_attributes=True)
+
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str = Field(min_length=6)

@@ -14,3 +14,4 @@ scikit-learn
 xgboost
 shap
 email-validator
+httpx

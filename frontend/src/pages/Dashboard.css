@@ -165,6 +165,57 @@
   margin-bottom: 28px;
 }
 
+/* ─── 30-Day Insight ─── */
+.dashboard-insight {
+  padding: 20px 24px;
+  margin-bottom: 28px;
+  border-radius: var(--radius-lg);
+}
+
+.dashboard-insight__row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.dashboard-insight__metric {
+  display: flex;
+  flex-direction: column;
+  min-width: 110px;
+}
+
+.dashboard-insight__val {
+  font-size: 1.7rem;
+  font-weight: 800;
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-top: 4px;
+}
+
+.dashboard-insight__text {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.dashboard-insight__text p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .dashboard-insight__row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
 /* ─── History Table ─── */
 .dashboard-history {
   padding: 24px;
@@ -228,4 +279,118 @@
   .dashboard-error-card {
     padding: 32px 20px;
   }
+}
+
+/* ─── Custom Modal & Row Styles ─── */
+.dashboard-table tr {
+  cursor: pointer;
+}
+
+.btn-delete {
+  background: transparent;
+  color: #f43f5e;
+  border: 1px solid #f43f5e;
+  border-radius: var(--radius-sm, 4px);
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all var(--transition-base, 0.2s ease);
+}
+
+.btn-delete:hover {
+  background: #f43f5e;
+  color: #fff;
+}
+
+.dashboard-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.dashboard-modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg, 12px);
+  padding: 24px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+  position: relative;
+  animation: fade-in-up 0.3s ease-out forwards;
+}
+
+.dashboard-modal h2 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 1.4rem;
+  border-bottom: 1px solid var(--border-glass);
+  padding-bottom: 12px;
+  padding-right: 24px;
+}
+
+.dashboard-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.dashboard-modal-close:hover {
+  color: var(--text-primary);
+}
+
+.dashboard-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+  margin-bottom: 24px;
+}
+
+.dashboard-modal-grid div {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px;
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--border-glass);
+}
+
+.dashboard-modal-grid strong {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dashboard-modal-grid span {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.dashboard-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  border-top: 1px solid var(--border-glass);
+  padding-top: 16px;
 }

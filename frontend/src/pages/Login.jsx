@@ -126,6 +126,12 @@ export default function Login() {
         </form>
 
         <p className="auth-footer">
+          <Link to="/forgot-password" style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+            Şifremi Unuttum
+          </Link>
+        </p>
+
+        <p className="auth-footer">
           Hesabınız yok mu? <Link to="/register">Kayıt Ol</Link>
         </p>
       </div>

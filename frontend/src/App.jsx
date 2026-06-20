@@ -12,6 +12,8 @@ const Register = lazy(() => import('./pages/Register'));
 const Form = lazy(() => import('./pages/Form'));
 const Result = lazy(() => import('./pages/Result'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 
 export default function App() {
   return (
@@ -28,6 +30,8 @@ export default function App() {
                 <Route path="/form" element={<Form />} />
                 <Route path="/result" element={<Result />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="*" element={<Navigate to="/" />} />
               </Routes>
             </Suspense>
@@ -37,4 +41,3 @@ export default function App() {
     </HelmetProvider>
   );
 }
-

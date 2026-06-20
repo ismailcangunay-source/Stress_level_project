@@ -93,9 +93,24 @@ const StressChart = ({ assessments }) => {
     },
   };
 
+  const getTrendSummary = () => {
+    if (scores.length < 2) return "Trendi belirlemek için henüz yeterli veri yok.";
+    const firstHalfAvg = scores.slice(0, Math.ceil(scores.length / 2)).reduce((a, b) => a + b, 0) / Math.ceil(scores.length / 2);
+    const secondHalfAvg = scores.slice(Math.ceil(scores.length / 2)).reduce((a, b) => a + b, 0) / Math.floor(scores.length / 2);
+    const diff = secondHalfAvg - firstHalfAvg;
+    if (diff > 5) return "Stres seviyeniz artış eğiliminde görünüyor.";
+    if (diff < -5) return "Stres seviyeniz düşüş eğiliminde (iyileşiyor) görünüyor.";
+    return "Stres seviyeniz stabil görünüyor.";
+  };
+
   return (
-    <div style={{ height: '300px' }}>
-      <Line data={data} options={options} />
+    <div>
+      <div style={{ height: '300px' }}>
+        <Line data={data} options={options} />
+      </div>
+      <div style={{ marginTop: '16px', textAlign: 'center', color: '#9ca3af', fontSize: '14px' }}>
+        <strong>Analiz:</strong> {getTrendSummary()}
+      </div>
     </div>
   );
 };
