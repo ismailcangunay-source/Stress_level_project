@@ -27,8 +27,9 @@ pip-delete-this-directory.txt
 *.egg
 
 # ML
+# NOT: ml/models/ artik takip ediliyor (egitilmis model artefaktlari repoda).
+# Veri seti ve ham veri klasoru disarida tutuluyor.
 university_student_stress_dataset.csv
-ml/models/
 ml/data/
 
 # IDEs
