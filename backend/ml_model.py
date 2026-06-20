@@ -24,10 +24,24 @@ class StressPredictor:
         self._feature_names: list[str] = []
         self._shap_importance: dict[str, float] = {}
 
+    @staticmethod
+    def _resolve_model_dir() -> Path:
+        """Find the models dir across deploy layouts (Render root=backend or full repo)."""
+        env = os.getenv("MODEL_DIR")
+        if env:
+            return Path(env)
+        here = Path(__file__).resolve().parent
+        candidates = [
+            here / "models",                 # backend/models  (Render root=backend)
+            here.parent / "ml" / "models",   # <repo>/ml/models (local / full repo)
+        ]
+        for c in candidates:
+            if (c / "best_model.joblib").exists():
+                return c
+        return candidates[0]
+
     def try_load(self) -> None:
-        model_dir = Path(
-            os.getenv("MODEL_DIR", Path(__file__).resolve().parent.parent / "ml" / "models")
-        )
+        model_dir = self._resolve_model_dir()
         model_path = model_dir / "best_model.joblib"
         scaler_path = model_dir / "scaler.joblib"
         le_path = model_dir / "label_encoder.joblib"
